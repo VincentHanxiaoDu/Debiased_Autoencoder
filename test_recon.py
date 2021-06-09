@@ -17,11 +17,11 @@ if __name__ == "__main__":
     original_labels = original_data["labels"][:]
     N = original_labels.shape[0]
     training_indices, testing_indices = generate_training_testing_indices(N)
-    
+
     latent_dim = 100
     db_vae = DB_VAE(latent_dim)
     db_vae.load_weights(CHECKPOINT_PREFIX)
-    
+
     test_logger = logging.getLogger("Test")
     test_logger.setLevel(LOG_LEVEL)
     test_labels = original_labels[testing_indices]
