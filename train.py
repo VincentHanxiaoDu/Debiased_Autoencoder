@@ -66,6 +66,9 @@ if __name__ == "__main__":
     DATA_FILE_NAME = "CelebA.h5"
     DATA_FILE_PATH = os.path.join(DATASETS_DIR, DATA_FILE_NAME)
 
+    # Create DATASETS_DIR if it does not exist.
+    if not os.path.exists(DATASETS_DIR):
+        os.makedirs(DATASETS_DIR)
     # Download the data file if the file does not exist.
     if not os.path.exists(DATA_FILE_PATH):
         download_CelebA(dir=DATASETS_DIR, filename=DATA_FILE_NAME)
@@ -97,13 +100,3 @@ if __name__ == "__main__":
     test_labels = original_labels[testing_indices]
     test_accuracy = tf.equal(y_pred, test_labels).numpy().mean()
     test_logger.info(f"Test accuracy: {test_accuracy}")
-
-    
-    
-    recon_face_indices = testing_indices[np.where(
-        np.squeeze(test_labels, axis=-1) == 1)[0]][0:36]
-
-    _, z_mu, z_log_sigma_sq = db_vae.encode(original_images[recon_face_indices])
-    
-    z = db_vae.sample_latent(z_mu, z_log_sigma_sq)
-    reconstruction = np.clip(db_vae.decode(z), 0, 1)
