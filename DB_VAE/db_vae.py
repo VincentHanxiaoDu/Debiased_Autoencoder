@@ -329,7 +329,7 @@ class DB_VAE(tf.keras.Model):
         N = len(predict_indices)
         y_logit = np.array([], dtype=np.float32).reshape(0, 1)
         for start_ind in range(0, N, unit_batch_size):
-            end_ind = min(start_ind+unit_batch_size, N+1)
+            end_ind = min(start_ind+unit_batch_size, N)
             x_batch_indices = predict_indices[start_ind:end_ind]
             x_batch = preprocess_batch(x_batch_indices, original_images)[0]
             y_batch_logit = self.encode(x_batch)[0]
@@ -386,7 +386,7 @@ class DB_VAE(tf.keras.Model):
         N = len(training_face_images_indices)
         mu = np.zeros((N, self._latent_dim))
         for start_ind in range(0, N, unit_batch_size):
-            end_ind = min(start_ind+unit_batch_size, N+1)
+            end_ind = min(start_ind+unit_batch_size, N)
             img_indices = training_face_images_indices[start_ind:end_ind]
             batch = preprocess_batch(img_indices, original_images)[0]
             batch_mu = self.encode(batch)[1]
