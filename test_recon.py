@@ -6,7 +6,7 @@ import h5py
 if __name__ == "__main__":
     DATA_FILE_NAME = "CelebA.h5"
     DATA_FILE_PATH = os.path.join(DATASETS_DIR, DATA_FILE_NAME)
-    
+
     # Create DATASETS_DIR if it does not exist.
     if not os.path.exists(DATASETS_DIR):
         os.makedirs(DATASETS_DIR)

@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import math
 from tqdm import tqdm
 
-train_logger = logging.getLogger("dataset_utils")
-train_logger.setLevel(LOG_LEVEL)
+logger = logging.getLogger("dataset_utils")
+logger.setLevel(LOG_LEVEL)
 
 
 def download_file(url: str, file_path: str, buffer_size: int = 100000):
@@ -31,12 +31,12 @@ def download_file(url: str, file_path: str, buffer_size: int = 100000):
     # clear tqdm instances.
     if hasattr(tqdm, '_instances'):
         tqdm._instances.clear()
-    train_logger.info(
+    logger.info(
         f"Start downloading file from url: {url}.")
-    train_logger.info(f"Download path: {file_path}.")
+    logger.info(f"Download path: {file_path}.")
     with requests.get(url, stream=True) as response:
         response.raise_for_status()
-        total_size_in_bytes= int(response.headers.get('content-length', 0))
+        total_size_in_bytes = int(response.headers.get('content-length', 0))
         progression_bar = tqdm(total=total_size_in_bytes, unit='iB',
                                unit_scale=True)
         with open(file_path, 'wb') as f:
@@ -44,7 +44,7 @@ def download_file(url: str, file_path: str, buffer_size: int = 100000):
                 progression_bar.update(len(chunk))
                 f.write(chunk)
             progression_bar.close()
-    train_logger.info("File downloaded successfully!")
+    logger.info("File downloaded successfully!")
     return file_path
 
 
@@ -68,6 +68,7 @@ def download_CelebA(dir: str = DATASETS_DIR, filename: str = "CelebA.h5"):
     # https://www.dropbox.com/s/hlz8atheyozp1yx/train_face.h5?dl=1
     celebA_url = "https://www.dropbox.com/s/hlz8atheyozp1yx/train_face.h5?dl=1"
     return download_file(celebA_url, os.path.join(dir, filename))
+
 
 def generate_training_testing_indices(data_size: int,
                                       training_ratio: float = 0.8):
@@ -136,7 +137,7 @@ def generate_testing_indices(data_size: int, training_indices: list):
 
 
 def visualize_images(images: np.ndarray, labels: np.ndarray = None,
-                     figsize = (10, 10),
+                     figsize=(10, 10),
                      *args, **kwargs):
     """Visualize 36 random samples from <images> in CelebA dataset.
 
@@ -154,7 +155,7 @@ def visualize_images(images: np.ndarray, labels: np.ndarray = None,
     plt.figure(figsize=figsize)
     row_num = math.ceil(math.sqrt(N))
     col_num = math.ceil(N/row_num)
-    
+
     for i in range(N):
         # plt.subplot index starts with 1
         plt.subplot(row_num, col_num, i+1)
@@ -167,6 +168,7 @@ def visualize_images(images: np.ndarray, labels: np.ndarray = None,
         if labels:
             plt.xlabel(np.squeeze(labels[i], axis=-1))
     plt.show()
+
 
 def preprocess_batch(sorted_inds, x=None, y=None):
     """Preprocess batched data.
